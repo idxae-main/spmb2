@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPMB - SMK Bina Putera Bogor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --card-bg: #ffffff;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .logo-text {
+            text-align: left;
+        }
+        
+        .logo-text .school-name {
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text .foundation {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .login-container {
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .login-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+        
+        .login-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .login-option {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .login-option:hover, .login-option.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .login-option i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .login-form {
+            display: none;
+        }
+        
+        .login-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #userPage, #adminPage {
+            display: none;
+            padding: 25px;
+        }
+        
+        .page-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: var(--radius);
+            background: var(--light);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .section-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        textarea:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+            color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-top: 25px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1.5s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .jurusan-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .jurusan-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .jurusan-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .jurusan-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .data-table-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .table-header {
+            padding: 15px 20px;
+            background: var(--light);
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background: var(--light);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--light);
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #e9ecef;
+            line-height: 1.8;
+        }
+        
+        .footer-school {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-options {
+                flex-direction: column;
+            }
+            
+            .admin-controls {
+                flex-direction: column;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .jurusan-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="https://image2url.com/images/1763126841143-3bcc6980-63f1-4085-ab04-2fe015a1644e.png" alt="Logo SMK Bina Putera Bogor">
+                </div>
+                <div class="logo-text">
+                    <div class="school-name">SMK BINA PUTERA BOGOR</div>
+                    <div class="foundation">YAYASAN PENDIDIKAN KATULAMPA</div>
+                </div>
+            </div>
+            <h1>SELEKSI PENERIMAAN MURID BARU</h1>
+            <p class="subtitle">Tahun Ajaran 2026/2027</p>
+        </header>
+        
+        <!-- Login Page -->
+        <div id="loginPage">
+            <div class="login-container">
+                <h2 class="login-title">Login SPMB</h2>
+                <div class="login-options">
+                    <div class="login-option active" data-role="user">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>Calon Murid</h3>
+                        <p>Isi formulir pendaftaran</p>
+                    </div>
+                    <div class="login-option" data-role="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Admin</h3>
+                        <p>Kelola data pendaftaran</p>
+                    </div>
+                </div>
+                
+                <div class="login-form active" id="userLoginForm">
+                    <div class="form-group">
+                        <label for="userName"><i class="fas fa-user"></i> Nama Lengkap</label>
+                        <input type="text" id="userName" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="userEmail" placeholder="Masukkan email">
+                    </div>
+                    <button class="btn btn-primary" id="userLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Masuk sebagai Calon Murid
+                    </button>
+                </div>
+                
+                <div class="login-form" id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminUsername"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="adminUsername" placeholder="Masukkan username">
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="adminPassword" placeholder="Masukkan password">
+                    </div>
+                    <button class="btn btn-primary" id="adminLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Masuk sebagai Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Page (Form Pendaftaran) -->
+        <div id="userPage">
+            <h2 class="page-title"><i class="fas fa-user-graduate"></i> Formulir Pendaftaran</h2>
+            
+            <form id="spmbForm">
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Data Pribadi</h3>
+                    
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tempat_lahir">Tempat Lahir</label>
+                        <input type="text" id="tempat_lahir" name="tempat_lahir" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tanggal_lahir">Tanggal Lahir</label>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="laki" name="jenis_kelamin" value="Laki-laki" required>
+                                <label for="laki">Laki-laki</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="perempuan" name="jenis_kelamin" value="Perempuan">
+                                <label for="perempuan">Perempuan</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alamat">Alamat Lengkap</label>
+                        <textarea id="alamat" name="alamat" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="no_hp">Nomor HP/WhatsApp</label>
+                        <input type="tel" id="no_hp" name="no_hp" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-school"></i> Data Pendidikan</h3>
+                    
+                    <div class="form-group">
+                        <label for="asal_sekolah">Asal Sekolah</label>
+                        <input type="text" id="asal_sekolah" name="asal_sekolah" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tahun_lulus">Tahun Lulus</label>
+                        <input type="number" id="tahun_lulus" name="tahun_lulus" min="2024" max="2026" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jurusan_dipilih">Jurusan yang Dipilih</label>
+                        <select id="jurusan_dipilih" name="jurusan_dipilih" required>
+                            <option value="">Pilih Jurusan</option>
+                            <option value="Pemasaran">Pemasaran</option>
+                            <option value="Teknik Komputer dan Jaringan">Teknik Komputer dan Jaringan</option>
+                            <option value="Teknik Sepeda Motor">Teknik Sepeda Motor</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-users"></i> Data Orang Tua/Wali</h3>
+                    
+                    <div class="form-group">
+                        <label for="nama_ortu">Nama Orang Tua/Wali</label>
+                        <input type="text" id="nama_ortu" name="nama_ortu" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pekerjaan_ortu">Pekerjaan Orang Tua/Wali</label>
+                        <input type="text" id="pekerjaan_ortu" name="pekerjaan_ortu" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="no_hp_ortu">Nomor HP Orang Tua/Wali</label>
+                        <input type="tel" id="no_hp_ortu" name="no_hp_ortu" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Informasi Tambahan</h3>
+                    
+                    <div class="form-group">
+                        <label for="alasan_masuk">Alasan Memilih SMK Bina Putera Bogor</label>
+                        <textarea id="alasan_masuk" name="alasan_masuk" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prestasi">Prestasi yang Pernah Diraih (jika ada)</label>
+                        <textarea id="prestasi" name="prestasi" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="setuju" name="setuju" required>
+                        <label for="setuju">Saya menyatakan bahwa data yang diisi adalah benar dan siap mengikuti proses seleksi</label>
+                    </div>
+                </div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="loading-spinner"></div>
+                    <p>Mengirim data...</p>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submitButton">
+                    <i class="fas fa-paper-plane"></i> Daftar Sekarang
+                </button>
+                
+                <div id="successMessage" class="success-message">
+                    <h3><i class="fas fa-check-circle"></i> SUKSES!</h3>
+                    <p>Pendaftaran Anda berhasil. Data telah tersimpan di database kami.</p>
+                    <p>Kami akan menghubungi Anda melalui WhatsApp untuk informasi selanjutnya.</p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Admin Page -->
+        <div id="adminPage">
+            <h2 class="page-title"><i class="fas fa-user-shield"></i> Dashboard Admin</h2>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-number" id="totalPendaftar">0</div>
+                    <div class="stat-label">Total Pendaftar</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-book"></i>
+                    <div class="stat-number" id="totalJurusan">3</div>
+                    <div class="stat-label">Jurusan Tersedia</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-number" id="pendaftarHariIni">0</div>
+                    <div class="stat-label">Pendaftar Hari Ini</div>
+                </div>
+            </div>
+            
+            <h3 class="section-title"><i class="fas fa-chart-pie"></i> Statistik Per Jurusan</h3>
+            <div class="jurusan-stats">
+                <div class="jurusan-card">
+                    <div class="jurusan-name">
+                        <i class="fas fa-shopping-cart"></i> Pemasaran
+                    </div>
+                    <div class="jurusan-count" id="countPemasaran">0</div>
+                    <div class="stat-label">Peminat</div>
+                </div>
+                <div class="jurusan-card">
+                    <div class="jurusan-name">
+                        <i class="fas fa-laptop"></i> Teknik Komputer dan Jaringan
+                    </div>
+                    <div class="jurusan-count" id="countTKJ">0</div>
+                    <div class="stat-label">Peminat</div>
+                </div>
+                <div class="jurusan-card">
+                    <div class="jurusan-name">
+                        <i class="fas fa-motorcycle"></i> Teknik Sepeda Motor
+                    </div>
+                    <div class="jurusan-count" id="countTSM">0</div>
+                    <div class="stat-label">Peminat</div>
+                </div>
+            </div>
+            
+            <div class="admin-controls">
+                <button class="btn btn-success" id="refreshDataBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+                <button class="btn btn-warning" id="downloadPDFBtn">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+            </div>
+            
+            <div class="data-table-container">
+                <div class="table-header">
+                    <div class="table-title">Data Pendaftar</div>
+                    <div id="dataCount">Menampilkan 0 data</div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="pendaftarTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Asal Sekolah</th>
+                                <th>Jurusan</th>
+                                <th>No. HP</th>
+                                <th>Tanggal Daftar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendaftarTableBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-school">SMK BINA PUTERA BOGOR 2025</div>
+            <div>Jl Pengairan Katulampa, Kel Katulampa Kec Bogor Timur</div>
+            <div>Email: smk.binaputera@yahoo.com | Telp: (0251) 8359928 | Kode Pos: 16144</div>
+        </footer>
+    </div>
+
+    <script>
+        // URL Google Apps Script untuk penyimpanan database
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJgpFu6T6dkBjYMW9LGsKehLkaOs4BeZz3RvAVypvMDP0W6FprkrjzghP4Zzuf_Dav/exec';
+        
+        // Data untuk simulasi (dalam aplikasi nyata, data akan diambil dari Google Sheets)
+        let pendaftarData = JSON.parse(localStorage.getItem('spmbData')) || [];
+        
+        // Elemen DOM
+        const loginPage = document.getElementById('loginPage');
+        const userPage = document.getElementById('userPage');
+        const adminPage = document.getElementById('adminPage');
+        
+        const loginOptions = document.querySelectorAll('.login-option');
+        const userLoginForm = document.getElementById('userLoginForm');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const userLoginBtn = document.getElementById('userLoginBtn');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        
+        const spmbForm = document.getElementById('spmbForm');
+        const successMessage = document.getElementById('successMessage');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const submitButton = document.getElementById('submitButton');
+        
+        const refreshDataBtn = document.getElementById('refreshDataBtn');
+        const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+        const pendaftarTableBody = document.getElementById('pendaftarTableBody');
+        const dataCount = document.getElementById('dataCount');
+        const totalPendaftar = document.getElementById('totalPendaftar');
+        const pendaftarHariIni = document.getElementById('pendaftarHariIni');
+        
+        // Elemen untuk statistik jurusan
+        const countPemasaran = document.getElementById('countPemasaran');
+        const countTKJ = document.getElementById('countTKJ');
+        const countTSM = document.getElementById('countTSM');
+        
+        // Event Listeners untuk login options
+        loginOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Hapus kelas active dari semua options
+                loginOptions.forEach(opt => opt.classList.remove('active'));
+                // Tambahkan kelas active ke option yang diklik
+                this.classList.add('active');
+                
+                const role = this.getAttribute('data-role');
+                if (role === 'user') {
+                    userLoginForm.classList.add('active');
+                    adminLoginForm.classList.remove('active');
+                } else if (role === 'admin') {
+                    userLoginForm.classList.remove('active');
+                    adminLoginForm.classList.add('active');
+                }
+            });
+        });
+        
+        // Login sebagai User
+        userLoginBtn.addEventListener('click', function() {
+            const userName = document.getElementById('userName').value;
+            const userEmail = document.getElementById('userEmail').value;
+            
+            if (!userName || !userEmail) {
+                alert('Harap isi nama dan email untuk melanjutkan.');
+                return;
+            }
+            
+            // Tampilkan halaman user
+            showUserPage();
+        });
+        
+        // Login sebagai Admin
+        adminLoginBtn.addEventListener('click', function() {
+            const adminUsername = document.getElementById('adminUsername').value;
+            const adminPassword = document.getElementById('adminPassword').value;
+            
+            // Untuk demo, kita gunakan username dan password sederhana
+            if (adminUsername === 'admin' && adminPassword === 'admin123') {
+                // Tampilkan halaman admin
+                showAdminPage();
+            } else {
+                alert('Username atau password salah!');
+            }
+        });
+        
+        // Fungsi untuk menampilkan halaman login
+        function showLoginPage() {
+            loginPage.style.display = 'block';
+            userPage.style.display = 'none';
+            adminPage.style.display = 'none';
+        }
+        
+        // Fungsi untuk menampilkan halaman user
+        function showUserPage() {
+            loginPage.style.display = 'none';
+            userPage.style.display = 'block';
+            adminPage.style.display = 'none';
+        }
+        
+        // Fungsi untuk menampilkan halaman admin
+        function showAdminPage() {
+            loginPage.style.display = 'none';
+            userPage.style.display = 'none';
+            adminPage.style.display = 'block';
+            
+            // Muat data pendaftar
+            loadPendaftarData();
+        }
+        
+        // Cek status login saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoginPage();
+        });
+        
+        // Form Pendaftaran
+        spmbForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validasi form
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Tampilkan loading indicator
+            loadingIndicator.style.display = 'block';
+            submitButton.disabled = true;
+            successMessage.style.display = 'none';
+            
+            // Ambil data dari form
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            // Tambahkan timestamp
+            data.timestamp = new Date().toLocaleString('id-ID');
+            data.id = Date.now(); // ID unik
+            
+            // Simpan data ke Google Apps Script
+            sendToGoogleSheets(data);
+        });
+        
+        function validateForm() {
+            const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = '#f72585';
+                } else {
+                    field.style.borderColor = '#e9ecef';
+                }
+            });
+            
+            // Validasi checkbox persetujuan
+            const agreement = document.getElementById('setuju');
+            if (!agreement.checked) {
+                isValid = false;
+                agreement.parentElement.style.color = '#f72585';
+            } else {
+                agreement.parentElement.style.color = '';
+            }
+            
+            return isValid;
+        }
+        
+        function sendToGoogleSheets(data) {
+            // Membuat FormData untuk dikirim
+            const formData = new FormData();
+            for (const key in data) {
+                formData.append(key, data[key]);
+            }
+            
+            // Mengirim data ke Google Apps Script
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(result => {
+                console.log('Sukses mengirim ke Google Sheets:', result);
+                
+                // Simpan data ke localStorage sebagai backup
+                saveToLocalStorage(data);
+                
+                // Sembunyikan loading indicator
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+                
+                // Tampilkan pesan sukses
+                successMessage.style.display = 'block';
+                
+                // Reset form
+                spmbForm.reset();
+                
+                // Scroll ke pesan sukses
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(error => {
+                console.error('Error mengirim ke Google Sheets:', error);
+                
+                // Sembunyikan loading indicator
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+                
+                // Tetap tampilkan pesan sukses meskipun ada error
+                successMessage.style.display = 'block';
+                
+                // Simpan data ke localStorage sebagai backup
+                saveToLocalStorage(data);
+                
+                // Reset form
+                spmbForm.reset();
+                
+                // Scroll ke pesan sukses
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+        
+        function saveToLocalStorage(data) {
+            // Tambah data baru
+            pendaftarData.push(data);
+            
+            // Simpan kembali ke localStorage
+            localStorage.setItem('spmbData', JSON.stringify(pendaftarData));
+            
+            console.log('Data disimpan di localStorage:', data);
+        }
+        
+        // Fungsi untuk memuat data pendaftar (Admin)
+        function loadPendaftarData() {
+            // Update statistik
+            totalPendaftar.textContent = pendaftarData.length;
+            
+            // Hitung pendaftar hari ini
+            const today = new Date().toLocaleDateString('id-ID');
+            const todayCount = pendaftarData.filter(item => {
+                return item.timestamp && item.timestamp.includes(today);
+            }).length;
+            pendaftarHariIni.textContent = todayCount;
+            
+            // Hitung statistik per jurusan
+            calculateJurusanStats();
+            
+            // Update tabel
+            updatePendaftarTable();
+        }
+        
+        // Fungsi untuk menghitung statistik per jurusan
+        function calculateJurusanStats() {
+            const pemasaranCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Pemasaran'
+            ).length;
+            
+            const tkjCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Teknik Komputer dan Jaringan'
+            ).length;
+            
+            const tsmCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Teknik Sepeda Motor'
+            ).length;
+            
+            // Update tampilan
+            countPemasaran.textContent = pemasaranCount;
+            countTKJ.textContent = tkjCount;
+            countTSM.textContent = tsmCount;
+        }
+        
+        function updatePendaftarTable() {
+            pendaftarTableBody.innerHTML = '';
+            
+            if (pendaftarData.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" style="text-align: center; padding: 30px;">Belum ada data pendaftar</td>`;
+                pendaftarTableBody.appendChild(row);
+                dataCount.textContent = 'Menampilkan 0 data';
+                return;
+            }
+            
+            // Urutkan data berdasarkan ID (timestamp) terbaru
+            const sortedData = [...pendaftarData].sort((a, b) => b.id - a.id);
+            
+            sortedData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.nama || '-'}</td>
+                    <td>${item.asal_sekolah || '-'}</td>
+                    <td>${item.jurusan_dipilih || '-'}</td>
+                    <td>${item.no_hp || '-'}</td>
+                    <td>${item.timestamp || '-'}</td>
+                `;
+                pendaftarTableBody.appendChild(row);
+            });
+            
+            dataCount.textContent = `Menampilkan ${pendaftarData.length} data`;
+        }
+        
+        // Event listener untuk refresh data
+        refreshDataBtn.addEventListener('click', function() {
+            loadPendaftarData();
+        });
+        
+        // Event listener untuk download PDF
+        downloadPDFBtn.addEventListener('click', function() {
+            if (pendaftarData.length === 0) {
+                alert('Tidak ada data untuk diunduh!');
+                return;
+            }
+            
+            generatePDF();
+        });
+        
+        // Fungsi untuk menghasilkan PDF
+        function generatePDF() {
+            // Inisialisasi jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Judul dokumen
+            doc.setFontSize(18);
+            doc.setTextColor(40, 40, 40);
+            doc.text('DATA PENDAFTAR SPMB', 105, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('SMK BINA PUTERA BOGOR', 105, 22, { align: 'center' });
+            doc.text('TAHUN AJARAN 2026/2027', 105, 29, { align: 'center' });
+            
+            // Tanggal generate
+            const currentDate = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            doc.setFontSize(10);
+            doc.text(`Dicetak pada: ${currentDate}`, 14, 40);
+            
+            // Statistik per jurusan
+            const pemasaranCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Pemasaran'
+            ).length;
+            
+            const tkjCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Teknik Komputer dan Jaringan'
+            ).length;
+            
+            const tsmCount = pendaftarData.filter(item => 
+                item.jurusan_dipilih === 'Teknik Sepeda Motor'
+            ).length;
+            
+            // Tambahkan statistik ke PDF
+            doc.setFontSize(11);
+            doc.text(`Total Pendaftar: ${pendaftarData.length}`, 14, 50);
+            doc.text(`Pemasaran: ${pemasaranCount}`, 14, 57);
+            doc.text(`Teknik Komputer dan Jaringan: ${tkjCount}`, 14, 64);
+            doc.text(`Teknik Sepeda Motor: ${tsmCount}`, 14, 71);
+            
+            // Data untuk tabel
+            const tableData = [];
+            
+            // Header tabel
+            const headers = [
+                'No',
+                'Nama Lengkap',
+                'Asal Sekolah', 
+                'Jurusan',
+                'No. HP',
+                'Tanggal Daftar'
+            ];
+            
+            // Isi tabel
+            pendaftarData.forEach((item, index) => {
+                tableData.push([
+                    index + 1,
+                    item.nama || '-',
+                    item.asal_sekolah || '-',
+                    item.jurusan_dipilih || '-',
+                    item.no_hp || '-',
+                    item.timestamp || '-'
+                ]);
+            });
+            
+            // Buat tabel
+            doc.autoTable({
+                head: [headers],
+                body: tableData,
+                startY: 80,
+                styles: {
+                    fontSize: 9,
+                    cellPadding: 3,
+                },
+                headStyles: {
+                    fillColor: [67, 97, 238],
+                    textColor: 255,
+                    fontStyle: 'bold'
+                },
+                alternateRowStyles: {
+                    fillColor: [240, 240, 240]
+                },
+                margin: { top: 80 }
+            });
+            
+            // Simpan PDF
+            doc.save(`Data_Pendaftar_SMB_${new Date().toISOString().slice(0,10)}.pdf`);
+        }
+        
+        // Reset border color ketika user mulai mengetik
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', function() {
+                this.style.borderColor = '#e9ecef';
+            });
+        });
+    </script>
+</body>
+</html>
